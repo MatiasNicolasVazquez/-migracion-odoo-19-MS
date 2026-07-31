@@ -29,8 +29,7 @@ VALUES
   ('fb_pixel', 'pending'),
   ('ga4_pixel', 'pending'),
   ('gtm_pixel', 'pending'),
-  ('eb_website_sale_google_analytics_4', 'pending'),
-  ('task_list', 'pending')
+  ('eb_website_sale_google_analytics_4', 'pending')
 ON CONFLICT (module_id) DO NOTHING;
 
 INSERT INTO public.test_progress (module_id, step_id, done, result)
@@ -162,8 +161,5 @@ VALUES
   ('eb_website_sale_google_analytics_4', 'ebga-2', false, 'pending'),
   ('eb_website_sale_google_analytics_4', 'ebga-3', false, 'pending'),
   ('eb_website_sale_google_analytics_4', 'ebga-4', false, 'pending'),
-  ('eb_website_sale_google_analytics_4', 'ebga-5', false, 'pending'),
-  ('task_list', 'tl-1', false, 'pending'),
-  ('task_list', 'tl-2', false, 'pending'),
-  ('task_list', 'tl-3', false, 'pending')
+  ('eb_website_sale_google_analytics_4', 'ebga-5', false, 'pending')
 ON CONFLICT (module_id, step_id) DO NOTHING;

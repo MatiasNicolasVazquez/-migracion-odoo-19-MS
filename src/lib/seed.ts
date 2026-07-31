@@ -1,6 +1,8 @@
 import { MODULES } from "@/data/modules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+const KNOWN_IDS = new Set(MODULES.map((m) => m.id));
+
 /** Upserts pending rows for any missing modules / test steps. */
 export async function ensureSeed(sb: SupabaseClient): Promise<void> {
   const statusRows = MODULES.map((m) => ({
@@ -22,16 +24,36 @@ export async function ensureSeed(sb: SupabaseClient): Promise<void> {
     })),
   );
 
-  // Upsert in chunks to avoid payload limits
   const chunkSize = 80;
   for (let i = 0; i < stepRows.length; i += chunkSize) {
     const chunk = stepRows.slice(i, i + chunkSize);
-    const { error } = await sb
-      .from("test_progress")
-      .upsert(chunk, {
-        onConflict: "module_id,step_id",
-        ignoreDuplicates: true,
-      });
+    const { error } = await sb.from("test_progress").upsert(chunk, {
+      onConflict: "module_id,step_id",
+      ignoreDuplicates: true,
+    });
     if (error) throw error;
   }
+}
+
+/** Deletes modules that no longer exist in the app catalog (e.g. task_list). */
+export async function removeOrphanModules(
+  sb: SupabaseClient,
+  existingIds: string[],
+): Promise<boolean> {
+  const orphans = existingIds.filter((id) => !KNOWN_IDS.has(id));
+  if (orphans.length === 0) return false;
+
+  const { error: progErr } = await sb
+    .from("test_progress")
+    .delete()
+    .in("module_id", orphans);
+  if (progErr) throw progErr;
+
+  const { error: stErr } = await sb
+    .from("module_status")
+    .delete()
+    .in("module_id", orphans);
+  if (stErr) throw stErr;
+
+  return true;
 }

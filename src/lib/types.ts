@@ -17,7 +17,6 @@ export type Category =
   | "account"
   | "analytics"
   | "theme"
-  | "tools"
   | "warranty";
 
 export interface TestStep {

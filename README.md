@@ -40,12 +40,15 @@ Abrí [http://localhost:3000](http://localhost:3000). Deberías ver “Supabase 
 
 ## 4. Deploy en Vercel
 
-1. Subí el repo a GitHub
-2. Importá en [Vercel](https://vercel.com)
-3. En Environment Variables agregá las mismas dos keys:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-4. Deploy y compartí la URL con tu compañero
+`.env.local` **no se sube** al repo. Tenés que cargar las variables a mano:
+
+1. Vercel → tu proyecto → **Settings → Environment Variables**
+2. Agregá (marcá Production y Preview):
+   - `NEXT_PUBLIC_SUPABASE_URL` = `https://wcplwtwyyaxjdrgybdfh.supabase.co`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = tu `sb_publishable_…`
+3. **Deployments → ⋯ → Redeploy** (obligatorio: las `NEXT_PUBLIC_*` se inyectan en el build)
+
+Sin ese redeploy, la app en Vercel sigue “Sin conexión remota”.
 
 ## Uso
 
@@ -60,7 +63,7 @@ Abrí [http://localhost:3000](http://localhost:3000). Deberías ver “Supabase 
 | P0 | Camino crítico tienda + pagos + Safe |
 | P1 | Tags/stock/account, Payway/Talo, zonas, FB feed |
 | P2 | UX/SEO/analytics/pixels |
-| P3 | `task_list`, módulo puente de valuation |
+| P3 | módulo puente de valuation |
 
 ## Seguridad
 

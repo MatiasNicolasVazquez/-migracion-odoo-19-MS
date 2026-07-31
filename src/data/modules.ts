@@ -1003,32 +1003,6 @@ export const MODULES: ModuleDef[] = [
     ],
   },
 
-  // ─── P3 ───────────────────────────────────────────────────────────
-  {
-    id: "task_list",
-    technicalName: "task_list",
-    displayName: "Lista de tareas",
-    version: "17.0.1.0.0",
-    depends: [],
-    category: "tools",
-    priority: "P3",
-    importance: 25,
-    summary: "Lista de tareas con estados y acciones personalizadas.",
-    testPlan: [
-      {
-        id: "tl-1",
-        title: "Instalar módulo",
-      },
-      {
-        id: "tl-2",
-        title: "CRUD de tareas y estados",
-      },
-      {
-        id: "tl-3",
-        title: "Mail / chatter si aplica",
-      },
-    ],
-  },
 ];
 
 export const MODULE_BY_ID = Object.fromEntries(
@@ -1058,7 +1032,6 @@ export const CATEGORY_LABELS: Record<string, string> = {
   account: "Contabilidad / Ventas",
   analytics: "Analytics",
   theme: "Theme",
-  tools: "Herramientas",
   warranty: "Garantías",
 };
 

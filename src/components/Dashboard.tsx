@@ -97,23 +97,28 @@ export function Dashboard() {
             <p className="font-medium">{error}</p>
             <ol className="mt-2 list-decimal space-y-1 pl-4 text-[var(--muted)]">
               <li>
-                Pegá URL y publishable key en{" "}
+                Local: pegá las keys en{" "}
                 <code className="rounded bg-black/5 px-1.5 py-0.5 text-[13px]">
                   .env.local
                 </code>
+              </li>
+              <li>
+                Vercel: Settings → Environment Variables → agregá{" "}
+                <code className="rounded bg-black/5 px-1.5 py-0.5 text-[13px]">
+                  NEXT_PUBLIC_SUPABASE_URL
+                </code>{" "}
+                y{" "}
+                <code className="rounded bg-black/5 px-1.5 py-0.5 text-[13px]">
+                  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+                </code>{" "}
+                (Production + Preview) y hacé Redeploy
               </li>
               <li>
                 Ejecutá{" "}
                 <code className="rounded bg-black/5 px-1.5 py-0.5 text-[13px]">
                   001_migration_control.sql
                 </code>{" "}
-                en el SQL Editor
-              </li>
-              <li>
-                Reiniciá{" "}
-                <code className="rounded bg-black/5 px-1.5 py-0.5 text-[13px]">
-                  npm run dev
-                </code>
+                en el SQL Editor de Supabase
               </li>
             </ol>
           </div>

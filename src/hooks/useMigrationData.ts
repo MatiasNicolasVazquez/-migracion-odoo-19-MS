@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { MODULES } from "@/data/modules";
-import { ensureSeed } from "@/lib/seed";
+import { ensureSeed, removeOrphanModules } from "@/lib/seed";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import type {
@@ -38,10 +38,10 @@ export function useMigrationData() {
   const [connected, setConnected] = useState(false);
 
   const refresh = useCallback(async () => {
-    if (!isSupabaseConfigured) {
+    if (!isSupabaseConfigured()) {
       setLoading(false);
       setError(
-        "Completá NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY en .env.local (ver README).",
+        "Faltan variables de entorno de Supabase. En local: .env.local. En Vercel: Project → Settings → Environment Variables → redeploy.",
       );
       return;
     }
@@ -54,11 +54,17 @@ export function useMigrationData() {
       if (stRes.error) throw stRes.error;
       if (prRes.error) throw prRes.error;
 
+      const existingIds = (stRes.data ?? []).map(
+        (r: { module_id: string }) => r.module_id,
+      );
       const needsSeed =
-        (stRes.data?.length ?? 0) < MODULES.length ||
+        existingIds.length < MODULES.length ||
         (prRes.data?.length ?? 0) === 0;
+      const removedOrphans = await removeOrphanModules(sb, existingIds);
       if (needsSeed) {
         await ensureSeed(sb);
+      }
+      if (needsSeed || removedOrphans) {
         [stRes, prRes] = await Promise.all([
           sb.from("module_status").select("*"),
           sb.from("test_progress").select("*"),
@@ -94,7 +100,7 @@ export function useMigrationData() {
   }, [refresh]);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    if (!isSupabaseConfigured()) return;
     const sb = createClient();
     const channel = sb
       .channel("migration-sync")
@@ -130,7 +136,7 @@ export function useMigrationData() {
         Pick<ModuleStatusRow, "status" | "assignee" | "notes" | "updated_by">
       >,
     ) => {
-      if (!isSupabaseConfigured) return;
+      if (!isSupabaseConfigured()) return;
       const sb = createClient();
       const payload = {
         module_id: moduleId,
@@ -157,7 +163,7 @@ export function useMigrationData() {
       stepId: string,
       patch: Partial<Pick<TestProgressRow, "done" | "result" | "note">>,
     ) => {
-      if (!isSupabaseConfigured) return;
+      if (!isSupabaseConfigured()) return;
       const sb = createClient();
       const payload = {
         module_id: moduleId,
