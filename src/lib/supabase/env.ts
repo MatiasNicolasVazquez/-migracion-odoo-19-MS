@@ -1,17 +1,17 @@
-function readEnv(name: string): string {
-  return (process.env[name] ?? "").trim();
-}
-
-/** Prefer publishable key; fall back to classic anon key. */
+/** Prefer publishable key; fall back to classic anon key.
+ * IMPORTANT: access env vars with static property names so Next.js
+ * can inline NEXT_PUBLIC_* values into the client bundle at build time.
+ */
 export function getSupabaseUrl(): string {
-  return readEnv("NEXT_PUBLIC_SUPABASE_URL");
+  return (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim();
 }
 
 export function getSupabaseKey(): string {
-  return (
-    readEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY") ||
-    readEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
-  );
+  const publishable = (
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? ""
+  ).trim();
+  const anon = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim();
+  return publishable || anon;
 }
 
 export function isSupabaseConfigured(): boolean {
