@@ -35,7 +35,7 @@ export async function ensureSeed(sb: SupabaseClient): Promise<void> {
   }
 }
 
-/** Deletes modules that no longer exist in the app catalog (e.g. task_list). */
+/** Deletes modules that no longer exist in the app catalog. */
 export async function removeOrphanModules(
   sb: SupabaseClient,
   existingIds: string[],

@@ -1,6 +1,6 @@
 # Migración Odoo 17 → 19 · MacStation
 
-App de control compartido para migrar los **30 módulos** de `web-macstation` de Odoo 17 a 19.
+App de control compartido para migrar los **27 módulos** de `web-macstation` de Odoo 17 a 19.
 
 - Priorización P0–P3 por dependencias e impacto
 - Plan de pruebas por módulo
@@ -61,7 +61,7 @@ Sin ese redeploy, la app en Vercel sigue “Sin conexión remota”.
 | Prioridad | Criterio |
 |---|---|
 | P0 | Camino crítico tienda + pagos + Safe |
-| P1 | Tags/stock/account, Payway/Talo, zonas, FB feed |
+| P1 | Tags/stock/account, Talo, zonas, FB feed |
 | P2 | UX/SEO/analytics/pixels |
 | P3 | módulo puente de valuation |
 
